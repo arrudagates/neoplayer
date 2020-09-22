@@ -1,0 +1,27 @@
+{
+  "name": "neoplayer",
+  "version": "0.0.1",
+  "description": "TUI/MPV youtube music player",
+  "main": "index.js",
+  "dependencies": {
+    "blessed": "^0.1.81",
+    "discord-rich-presence": "^0.0.8",
+    "node-mpv": "^2.0.0-beta.1",
+    "term.js": "^0.0.7",
+    "yt-search": "^2.3.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/arrudagates/neoplayer.git"
+  },
+  "author": "",
+  "license": "GPL-2.0",
+  "bugs": {
+    "url": "https://github.com/arrudagates/neoplayer/issues"
+  },
+  "homepage": "https://github.com/arrudagates/neoplayer#readme"
+}
