@@ -1,11 +1,12 @@
 var blessed = require('blessed')
 const yts = require('yt-search')
 const mpvAPI = require('node-mpv');
-const client = require('discord-rich-presence')('704314970522910730');
+//const client = require('discord-rich-presence')('704314970522910730')
 
 const mpv = new mpvAPI({
   "audio_only": true
 });
+
 async function start(){
   try{
   await mpv.start().then(screen.render())
@@ -14,9 +15,8 @@ async function start(){
 }
 catch (error) {
   console.log(error);
-}}
-
-
+  }
+}
 
 var screen = blessed.screen({
   smartCSR: true,
@@ -114,28 +114,34 @@ mpv.on("started", async () => {
   top.setContent(np)
   screen.render()
 
-  client.updatePresence({
-  state: np,
-  details: 'Playing:',
-  startTimestamp: Date.now(),
-  endTimestamp: Date.now() + (remaining * 1000),
-  largeImageKey: 'neoplayer',
-  smallImageKey: 'play-circle',
-  instance: true,
-});
+  // try{
+  // client.updatePresence({
+  // state: np,
+  // details: 'Playing:',
+  // startTimestamp: Date.now(),
+  // endTimestamp: Date.now() + (remaining * 1000),
+  // largeImageKey: 'neoplayer',
+  // smallImageKey: 'play-circle',
+  // instance: true,
+  //   });
+  // }
+  // catch{}
 })
 mpv.on("paused", async () => {
   let np = await mpv.getTitle()
   top.setLabel(' Paused ')
   screen.render()
 
-  client.updatePresence({
-  state: np,
-  details: 'Paused',
-  largeImageKey: 'neoplayer',
-  smallImageKey: 'pause-circle',
-  instance: true,
-});
+  // try{
+  // client.updatePresence({
+  // state: np,
+  // details: 'Paused',
+  // largeImageKey: 'neoplayer',
+  // smallImageKey: 'pause-circle',
+  // instance: true,
+  //   });
+  // }
+  // catch{}
 })
 mpv.on("resumed", async () => {
   let np = await mpv.getTitle()
@@ -143,28 +149,34 @@ mpv.on("resumed", async () => {
   top.setLabel(' Now Playing ')
   screen.render()
 
-  client.updatePresence({
-  state: np,
-  details: 'Playing:',
-  startTimestamp: Date.now(),
-  endTimestamp: Date.now() + (remaining * 1000),
-  largeImageKey: 'neoplayer',
-  smallImageKey: 'play-circle',
-  instance: true,
-});
+  // try{
+  // client.updatePresence({
+  // state: np,
+  // details: 'Playing:',
+  // startTimestamp: Date.now(),
+  // endTimestamp: Date.now() + (remaining * 1000),
+  // largeImageKey: 'neoplayer',
+  // smallImageKey: 'play-circle',
+  // instance: true,
+  //   });
+  // }
+  // catch{}
 });
 
 mpv.on("stopped", async () => {
   top.setContent(' Nothing ')
   screen.render()
 
-  client.updatePresence({
-  state: 'Nothing',
-  details: 'Playing:',
-  largeImageKey: 'neoplayer',
-  smallImageKey: 'stop-circle',
-  instance: true,
-});
+  // try{
+  // client.updatePresence({
+  // state: 'Nothing',
+  // details: 'Playing:',
+  // largeImageKey: 'neoplayer',
+  // smallImageKey: 'stop-circle',
+  // instance: true,
+  //   });
+  // }
+  // catch{}
 });
 
 
