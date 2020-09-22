@@ -82,7 +82,7 @@ var top = blessed.text({
   width: '100%',
   border: 'line',
   label: ' Now Playing ',
-  content: ''
+  content: 'Nothing'
 });
 
 screen.key('h', function() {
@@ -107,18 +107,21 @@ screen.key('esc', function() {
 
 start()
 
-let results,urls = []
+let results = []
+let urls = []
 
 async function search(arg){
-results, urls = []
+urls = []
+results = []
 const r = await yts(arg)
 
 const videos = r.videos.slice( 0, 10 )
 for (let i in videos){
-    list.add(i + " - " + videos[i].title)
+    results.push (i + " - " + videos[i].title)
+    // list.add(i + " - " + videos[i].title)
     urls.push(videos[i].url)
   }
-
+await list.setItems(results)
 
 await screen.render()
 }
@@ -141,13 +144,13 @@ async function pause(){
 
 mpv.on("started", async () => {
   let np = await mpv.getTitle()
-  let remaining = await mpv.getDuration()
+  let remaining = await mpv.getTimeRemaining()
   top.setContent(np)
   screen.render()
 
   client.updatePresence({
-  state: 'Playing:',
-  details: np,
+  state: np,
+  details: 'Playing:',
   startTimestamp: Date.now(),
   endTimestamp: Date.now() + (remaining * 1000),
   largeImageKey: 'neoplayer',
@@ -155,6 +158,48 @@ mpv.on("started", async () => {
   instance: true,
 });
 })
+mpv.on("paused", async () => {
+  let np = await mpv.getTitle()
+  top.setLabel(' Paused ')
+  screen.render()
+
+  client.updatePresence({
+  state: np,
+  details: 'Paused',
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'neoplayer',
+  instance: true,
+});
+})
+mpv.on("resumed", async () => {
+  let np = await mpv.getTitle()
+  let remaining = await mpv.getTimeRemaining()
+  top.setLabel(' Now Playing ')
+  screen.render()
+
+  client.updatePresence({
+  state: np,
+  details: 'Playing:',
+  startTimestamp: Date.now(),
+  endTimestamp: Date.now() + (remaining * 1000),
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'neoplayer',
+  instance: true,
+});
+});
+
+mpv.on("stopped", async () => {
+  top.setContent(' Nothing ')
+  screen.render()
+
+  client.updatePresence({
+  state: 'Nothing',
+  details: 'Playing:',
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'neoplayer',
+  instance: true,
+});
+});
 
 
 input.on('submit', function(){
