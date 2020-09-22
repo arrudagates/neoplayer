@@ -107,6 +107,67 @@ screen.key('esc', function() {
 
 start()
 
+
+mpv.on("started", async () => {
+  let np = await mpv.getTitle()
+  let remaining = await mpv.getTimeRemaining()
+  top.setContent(np)
+  screen.render()
+
+  client.updatePresence({
+  state: np,
+  details: 'Playing:',
+  startTimestamp: Date.now(),
+  endTimestamp: Date.now() + (remaining * 1000),
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'play-circle',
+  instance: true,
+});
+})
+mpv.on("paused", async () => {
+  let np = await mpv.getTitle()
+  top.setLabel(' Paused ')
+  screen.render()
+
+  client.updatePresence({
+  state: np,
+  details: 'Paused',
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'pause-circle',
+  instance: true,
+});
+})
+mpv.on("resumed", async () => {
+  let np = await mpv.getTitle()
+  let remaining = await mpv.getTimeRemaining()
+  top.setLabel(' Now Playing ')
+  screen.render()
+
+  client.updatePresence({
+  state: np,
+  details: 'Playing:',
+  startTimestamp: Date.now(),
+  endTimestamp: Date.now() + (remaining * 1000),
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'play-circle',
+  instance: true,
+});
+});
+
+mpv.on("stopped", async () => {
+  top.setContent(' Nothing ')
+  screen.render()
+
+  client.updatePresence({
+  state: 'Nothing',
+  details: 'Playing:',
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'stop-circle',
+  instance: true,
+});
+});
+
+
 let results = []
 let urls = []
 
@@ -142,64 +203,12 @@ async function pause(){
   catch (error){}
 }
 
-mpv.on("started", async () => {
-  let np = await mpv.getTitle()
-  let remaining = await mpv.getTimeRemaining()
-  top.setContent(np)
-  screen.render()
-
-  client.updatePresence({
-  state: np,
-  details: 'Playing:',
-  startTimestamp: Date.now(),
-  endTimestamp: Date.now() + (remaining * 1000),
-  largeImageKey: 'neoplayer',
-  smallImageKey: 'neoplayer',
-  instance: true,
-});
-})
-mpv.on("paused", async () => {
-  let np = await mpv.getTitle()
-  top.setLabel(' Paused ')
-  screen.render()
-
-  client.updatePresence({
-  state: np,
-  details: 'Paused',
-  largeImageKey: 'neoplayer',
-  smallImageKey: 'neoplayer',
-  instance: true,
-});
-})
-mpv.on("resumed", async () => {
-  let np = await mpv.getTitle()
-  let remaining = await mpv.getTimeRemaining()
-  top.setLabel(' Now Playing ')
-  screen.render()
-
-  client.updatePresence({
-  state: np,
-  details: 'Playing:',
-  startTimestamp: Date.now(),
-  endTimestamp: Date.now() + (remaining * 1000),
-  largeImageKey: 'neoplayer',
-  smallImageKey: 'neoplayer',
-  instance: true,
-});
-});
-
-mpv.on("stopped", async () => {
-  top.setContent(' Nothing ')
-  screen.render()
-
-  client.updatePresence({
-  state: 'Nothing',
-  details: 'Playing:',
-  largeImageKey: 'neoplayer',
-  smallImageKey: 'neoplayer',
-  instance: true,
-});
-});
+async function skip(){
+  try{
+    await mpv.next(mode="force")
+  }
+  catch (error){}
+}
 
 
 input.on('submit', function(){
@@ -208,16 +217,22 @@ input.on('submit', function(){
     case 'q':
       mpv.quit()
       return process.exit(0);
-      break
+      break;
     case 'search':
       search(input.value.slice(7))
-      break
+      break;
     case 'play':
       play(urls[input.value.slice(5)])
-      break
+      break;
     case 'pause':
       pause()
-      break
+      break;
+    case 'skip':
+      skip()
+      break;
+    // case 'url':
+    //   play(input.value.slice(4))
+    //   break
   }
   input.clearValue()
   screen.render()
