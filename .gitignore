@@ -106,3 +106,8 @@ dist
 
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
+
+#builds
+neoplayer-linux
+neoplayer-macos
+neoplayer-win.exe

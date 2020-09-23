@@ -1,9 +1,10 @@
 var blessed = require('neo-blessed')
 const yts = require('yt-search')
 const mpvAPI = require('node-mpv');
+const client = require('discord-rich-presence')('704314970522910730');
 //const jsonpath = require("jsonpath/jsonpath.min")
-const drplib = require('discord-rich-presence');
-let client
+
+client.on("error", () => {});
 
 const mpv = new mpvAPI({
   "audio_only": true
@@ -11,7 +12,6 @@ const mpv = new mpvAPI({
 
 async function start(){
   try{
-  client = await drplib('704314970522910730');
   await mpv.start().then(screen.render())
   await mpv.volume(70);
 }
