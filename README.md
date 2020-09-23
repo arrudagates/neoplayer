@@ -11,6 +11,12 @@ Then install the libraries with:
 npm install
 ```
 
+## Screenshots
+
+Neoplayer             |  Discord Rich Presence
+:-------------------------:|:-------------------------:
+![Neoplayer](screenshots/neoplayer.png)  |  ![Discord Rich Presence](screenshots/discord.png)
+
 ## Usage
 
 Run Neoplayer with:
