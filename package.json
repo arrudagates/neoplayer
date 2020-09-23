@@ -4,10 +4,10 @@
   "description": "TUI/MPV youtube music player",
   "main": "index.js",
   "dependencies": {
-    "blessed": "^0.1.81",
     "discord-rich-presence": "^0.0.8",
+    "esprima": "^4.0.1",
+    "neo-blessed": "^0.2.0",
     "node-mpv": "^2.0.0-beta.1",
-    "term.js": "^0.0.7",
     "yt-search": "^2.3.1"
   },
   "devDependencies": {},
@@ -23,5 +23,9 @@
   "bugs": {
     "url": "https://github.com/arrudagates/neoplayer/issues"
   },
-  "homepage": "https://github.com/arrudagates/neoplayer#readme"
+  "homepage": "https://github.com/arrudagates/neoplayer#readme",
+  "pkg": {
+    "scripts": "node_modules/neo-blessed/**/*",
+    "assets": "node_modules/neo-blessed/**/*"
+  }
 }

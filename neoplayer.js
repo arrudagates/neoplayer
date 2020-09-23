@@ -1,7 +1,8 @@
-var blessed = require('blessed')
+var blessed = require('neo-blessed')
 const yts = require('yt-search')
 const mpvAPI = require('node-mpv');
-//const client = require('discord-rich-presence')('704314970522910730')
+//const jsonpath = require("jsonpath/jsonpath.min")
+const client = require('discord-rich-presence')('704314970522910730')
 
 const mpv = new mpvAPI({
   "audio_only": true
@@ -10,7 +11,6 @@ const mpv = new mpvAPI({
 async function start(){
   try{
   await mpv.start().then(screen.render())
-
   await mpv.volume(70);
 }
 catch (error) {
@@ -90,11 +90,9 @@ screen.key('h', function() {
 });
 
 screen.key('r', function() {
-  //shuffle();
 });
 
 screen.key('S-s', function() {
-  //takeScreenshot(list.ritems[list.selected]);
 });
 
 screen.key('s', function() {
@@ -102,7 +100,6 @@ screen.key('s', function() {
 });
 
 screen.key('esc', function() {
-  return process.exit(0);
 });
 
 start()
@@ -114,34 +111,34 @@ mpv.on("started", async () => {
   top.setContent(np)
   screen.render()
 
-  // try{
-  // client.updatePresence({
-  // state: np,
-  // details: 'Playing:',
-  // startTimestamp: Date.now(),
-  // endTimestamp: Date.now() + (remaining * 1000),
-  // largeImageKey: 'neoplayer',
-  // smallImageKey: 'play-circle',
-  // instance: true,
-  //   });
-  // }
-  // catch{}
+  try{
+  client.updatePresence({
+  state: np,
+  details: 'Playing:',
+  startTimestamp: Date.now(),
+  endTimestamp: Date.now() + (remaining * 1000),
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'play-circle',
+  instance: true,
+    });
+  }
+  catch{}
 })
 mpv.on("paused", async () => {
   let np = await mpv.getTitle()
   top.setLabel(' Paused ')
   screen.render()
 
-  // try{
-  // client.updatePresence({
-  // state: np,
-  // details: 'Paused',
-  // largeImageKey: 'neoplayer',
-  // smallImageKey: 'pause-circle',
-  // instance: true,
-  //   });
-  // }
-  // catch{}
+  try{
+  client.updatePresence({
+  state: np,
+  details: 'Paused',
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'pause-circle',
+  instance: true,
+    });
+  }
+  catch{}
 })
 mpv.on("resumed", async () => {
   let np = await mpv.getTitle()
@@ -149,34 +146,34 @@ mpv.on("resumed", async () => {
   top.setLabel(' Now Playing ')
   screen.render()
 
-  // try{
-  // client.updatePresence({
-  // state: np,
-  // details: 'Playing:',
-  // startTimestamp: Date.now(),
-  // endTimestamp: Date.now() + (remaining * 1000),
-  // largeImageKey: 'neoplayer',
-  // smallImageKey: 'play-circle',
-  // instance: true,
-  //   });
-  // }
-  // catch{}
+  try{
+  client.updatePresence({
+  state: np,
+  details: 'Playing:',
+  startTimestamp: Date.now(),
+  endTimestamp: Date.now() + (remaining * 1000),
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'play-circle',
+  instance: true,
+    });
+  }
+  catch{}
 });
 
 mpv.on("stopped", async () => {
   top.setContent(' Nothing ')
   screen.render()
 
-  // try{
-  // client.updatePresence({
-  // state: 'Nothing',
-  // details: 'Playing:',
-  // largeImageKey: 'neoplayer',
-  // smallImageKey: 'stop-circle',
-  // instance: true,
-  //   });
-  // }
-  // catch{}
+  try{
+  client.updatePresence({
+  state: 'Nothing',
+  details: 'Playing:',
+  largeImageKey: 'neoplayer',
+  smallImageKey: 'stop-circle',
+  instance: true,
+    });
+  }
+  catch{}
 });
 
 
