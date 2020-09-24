@@ -2,12 +2,14 @@ var blessed = require('neo-blessed')
 const yts = require('yt-search')
 const mpvAPI = require('node-mpv');
 const client = require('discord-rich-presence')('704314970522910730');
+const clipboardy = require('clipboardy');
 //const jsonpath = require("jsonpath/jsonpath.min")
 
 client.on("error", () => {});
 
 const mpv = new mpvAPI({
-  "audio_only": true
+  "audio_only": true,
+  //"binary": __dirname + "/mpv.exe",
 });
 
 async function start(){
@@ -38,7 +40,7 @@ var input = blessed.textbox({
   parent: form,
   left: 0,
   bottom: 0,
-  height: '15%',
+  height: 3,//'15%',
   width: '100%',
   border: 'line',
   label: ' input ',
@@ -52,7 +54,7 @@ var list = blessed.list({
   interactive: false,
   top: 'center',
   width: '100%',
-  height: '70%',
+  height: screen.height - 7,//'70%',
   keys: true,
   border: 'line',
   scrollbar: {
@@ -77,15 +79,27 @@ var list = blessed.list({
   }
 });
 
+screen.on('resize', function(){list.height = screen.height - 7})
+
 var top = blessed.text({
   parent: screen,
   top: 0,
-  height: '15%',
+  height: 3,//'15%',
   width: '100%',
   border: 'line',
   label: ' Now Playing ',
   content: 'Nothing'
 });
+
+// var bar = blessed.progressbar({
+//   parent: screen,
+//   top: 3,
+//   height: 2,//'15%',
+//   width: '100%',
+//   border: 'line',
+//   pch: '-',
+// });
+
 
 screen.key('h', function() {
   input.readInput()
@@ -125,6 +139,13 @@ mpv.on("started", async () => {
     });
   }
   catch{}
+
+  // var timer = setInterval(async function () {
+  //   progress = await mpv.getPercentPosition()
+  //   await bar.setProgress(progress)
+  //   await screen.render()
+  // }, 100);
+
 })
 mpv.on("paused", async () => {
   let np = await mpv.getTitle()
@@ -187,7 +208,7 @@ urls = []
 results = []
 const r = await yts(arg)
 
-const videos = r.videos.slice( 0, 10 )
+const videos = r.videos.slice( 0, list.height - 2 )
 for (let i in videos){
     results.push (i + " - " + videos[i].title)
     // list.add(i + " - " + videos[i].title)
@@ -221,6 +242,20 @@ async function skip(){
   catch (error){}
 }
 
+async function volume(arg){
+  try{
+    await mpv.volume(arg)
+  }
+  catch (error){}
+}
+
+async function link(){
+  try{
+    let link = await mpv.getFilename(mode="full")
+    await clipboardy.writeSync(link);
+  }
+  catch (error){}
+}
 
 input.on('submit', function(){
   let arg = input.value.split(' ')
@@ -240,6 +275,12 @@ input.on('submit', function(){
       break;
     case 'skip':
       skip()
+      break;
+    case 'volume':
+      volume(input.value.slice(7))
+      break;
+    case 'link':
+      link()
       break;
     // case 'url':
     //   play(input.value.slice(4))

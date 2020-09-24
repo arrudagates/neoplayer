@@ -30,6 +30,8 @@ search <query> //searches youtube for the query and returns a list of results wi
 play <index> //plays the index from the search list or adds it to the currently playing queue
 pause //pauses the playback
 skip //skips to the next track
+volume <value> //sets the volume to the value specified
+link //copies the song url to the clipboard
 q //quits Neoplayer
 ```
 ## Contributing
