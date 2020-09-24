@@ -1,4 +1,4 @@
-var blessed = require('neo-blessed')
+const blessed = require('neo-blessed')
 const yts = require('yt-search')
 const mpvAPI = require('node-mpv');
 const client = require('discord-rich-presence')('704314970522910730');
@@ -22,13 +22,13 @@ catch (error) {
   }
 }
 
-var screen = blessed.screen({
+let screen = blessed.screen({
   smartCSR: true,
   dockBorders: true,
   //autoPadding: true
 });
 
-var form = blessed.form({
+let form = blessed.form({
   parent: screen,
   width: '100%',
   left: 'center',
@@ -36,7 +36,7 @@ var form = blessed.form({
   focused: true
 });
 
-var input = blessed.textbox({
+let input = blessed.textbox({
   parent: form,
   left: 0,
   bottom: 0,
@@ -49,7 +49,7 @@ var input = blessed.textbox({
   focused: true
 });
 
-var list = blessed.list({
+let list = blessed.list({
   parent: screen,
   interactive: false,
   top: 'center',
@@ -81,7 +81,7 @@ var list = blessed.list({
 
 screen.on('resize', function(){list.height = screen.height - 7})
 
-var top = blessed.text({
+let top = blessed.text({
   parent: screen,
   top: 0,
   height: 3,//'15%',
@@ -91,7 +91,7 @@ var top = blessed.text({
   content: 'Nothing'
 });
 
-// var bar = blessed.progressbar({
+// let bar = blessed.progressbar({
 //   parent: screen,
 //   top: 3,
 //   height: 2,//'15%',
@@ -140,7 +140,7 @@ mpv.on("started", async () => {
   }
   catch{}
 
-  // var timer = setInterval(async function () {
+  // let timer = setInterval(async function () {
   //   progress = await mpv.getPercentPosition()
   //   await bar.setProgress(progress)
   //   await screen.render()
