@@ -3,14 +3,48 @@ const yts = require('yt-search')
 const mpvAPI = require('node-mpv');
 const client = require('discord-rich-presence')('704314970522910730');
 const clipboardy = require('clipboardy');
-//const jsonpath = require("jsonpath/jsonpath.min")
+const fs = require('fs')
 
-client.on("error", () => {});
+// BUILD STUFF:
+// const tmp = require('tmp');
+// const tmpobj = tmp.dirSync({unsafeCleanup: true});
+
+// LINUX:
+// fs.writeFileSync(
+//   tmpobj.name + "/mpv",
+//   fs.readFileSync("./bin/mpv-linux"), {mode:0o777})
+//
+//   fs.writeFileSync(
+//     tmpobj.name + "/youtube-dl",
+//     fs.readFileSync("./bin/youtube-dl"), {mode:0o777})
+
+// WINDOWS:
+// fs.writeFileSync(
+//   tmpobj.name + "/mpv.exe",
+//   fs.readFileSync("./bin/mpv.exe"))
+//
+// fs.writeFileSync(
+//   tmpobj.name + "/youtube-dl.exe",
+//   fs.readFileSync("./bin/youtube-dl.exe"))
+// const { exec } = require('child_process');
+// exec(`iCACLS ${tmpobj.name}/*.exe /grant %USERSID%:RX`)
+
+// MACOS:
+// fs.writeFileSync(
+//   tmpobj.name + "/mpv",
+//   fs.readFileSync("./bin/mpv-mac"), {mode:0o777})
+//
+//   fs.writeFileSync(
+//     tmpobj.name + "/youtube-dl",
+//     fs.readFileSync("./bin/youtube-dl"), {mode:0o777})
 
 const mpv = new mpvAPI({
   "audio_only": true,
-  //"binary": __dirname + "/mpv.exe",
+  // "binary": tmpobj.name + "/mpv", //LINUX + MAC
+  //"binary": tmpobj.name + "/mpv.exe", //WINDOWS
 });
+
+client.on("error", () => {});
 
 async function start(){
   try{
@@ -262,6 +296,7 @@ input.on('submit', function(){
   switch (arg[0]){
     case 'q':
       mpv.quit()
+      tmpobj.removeCallback();
       return process.exit(0);
       break;
     case 'search':
