@@ -3,7 +3,8 @@ const yts = require('yt-search')
 const mpvAPI = require('node-mpv');
 const client = require('discord-rich-presence')('704314970522910730');
 const clipboardy = require('clipboardy');
-const fs = require('fs')
+const fs = require('fs');
+const { title } = require('process');
 
 // BUILD STUFF:
 // const tmp = require('tmp');
@@ -262,6 +263,11 @@ catch (error) {
   }
 }
 
+async function quickPlay(arg){
+  const r = await yts(arg)
+  await mpv.load(r.videos[0].url, mode="append-play")
+}
+
 async function pause(){
   try{
     await mpv.togglePause()
@@ -296,7 +302,7 @@ input.on('submit', function(){
   switch (arg[0]){
     case 'q':
       mpv.quit()
-      tmpobj.removeCallback();
+      //tmpobj.removeCallback();
       return process.exit(0);
       break;
     case 'search':
@@ -316,6 +322,9 @@ input.on('submit', function(){
       break;
     case 'link':
       link()
+      break;
+    case 'p':
+      quickPlay(input.value.slice(1))
       break;
     // case 'url':
     //   play(input.value.slice(4))

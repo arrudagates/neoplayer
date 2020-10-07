@@ -28,6 +28,7 @@ Commands currently available are (press 'h' to type commands):
 ```javascript
 search <query> //searches youtube for the query and returns a list of results with indexes
 play <index> //plays the index from the search list or adds it to the currently playing queue
+p <query> //searches and then plays the first result, doesn't show list of results
 pause //pauses the playback
 skip //skips to the next track
 volume <value> //sets the volume to the value specified
