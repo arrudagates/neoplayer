@@ -4,6 +4,7 @@
   "description": "TUI/MPV youtube music player",
   "main": "index.js",
   "dependencies": {
+    "appdirectory": "^0.1.0",
     "clipboardy": "^2.3.0",
     "discord-rich-presence": "0.0.8",
     "neo-blessed": "^0.2.0",

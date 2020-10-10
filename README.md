@@ -33,6 +33,9 @@ pause //pauses the playback
 skip //skips to the next track
 volume <value> //sets the volume to the value specified
 link //copies the song url to the clipboard
+new <name> //creates a new playlist named <name>
+add <playlist> //adds the song currently playing to <playlist>
+plist <playlist> //add all songs from <playlist> to the queue
 q //quits Neoplayer
 ```
 ## Contributing

@@ -4,7 +4,7 @@ const mpvAPI = require('node-mpv');
 const client = require('discord-rich-presence')('704314970522910730');
 const clipboardy = require('clipboardy');
 const fs = require('fs');
-const { title } = require('process');
+const appdirs = require('appdirectory');
 
 // BUILD STUFF:
 // const tmp = require('tmp');
@@ -38,6 +38,13 @@ const { title } = require('process');
 //   fs.writeFileSync(
 //     tmpobj.name + "/youtube-dl",
 //     fs.readFileSync("./bin/youtube-dl"), {mode:0o777})
+
+// Creating local directory
+var dir = new appdirs('neoplayer')
+var userdata = dir.userData()
+if (!fs.existsSync(userdata)){
+    fs.mkdirSync(userdata);
+}
 
 const mpv = new mpvAPI({
   "audio_only": true,
@@ -292,9 +299,43 @@ async function volume(arg){
 async function link(){
   try{
     let link = await mpv.getFilename(mode="full")
-    await clipboardy.writeSync(link);
+    clipboardy.writeSync(link);
   }
   catch (error){}
+}
+
+async function createPlist(arg){
+
+const json = {"playlist":[]}
+
+const data = JSON.stringify(json);
+
+ if(!fs.existsSync(userdata + `/${arg}.json`)) {
+   fs.writeFileSync(userdata + `/${arg}.json`, data); 
+ }
+}
+
+async function addToPlist(plist){
+let np = await mpv.getTitle()
+let url = await mpv.getFilename()
+ const obj = {
+    "name": np,
+    "url": url
+};
+
+  let plistFile = fs.readFileSync(userdata + `/${plist}.json`);
+  let json = JSON.parse(plistFile);
+  json.playlist.push(obj);
+  let data = JSON.stringify(json);
+  fs.writeFileSync(userdata + `/${plist}.json`, data); 
+}
+
+async function playPlist(plist){
+ let plistFile = fs.readFileSync(userdata + `/${plist}.json`);
+ let json = JSON.parse(plistFile);
+  for(let i=0;i<json.playlist.length;i++){
+    await mpv.load(json.playlist[i].url, mode="append-play")
+  }
 }
 
 input.on('submit', function(){
@@ -302,7 +343,6 @@ input.on('submit', function(){
   switch (arg[0]){
     case 'q':
       mpv.quit()
-      //tmpobj.removeCallback();
       return process.exit(0);
       break;
     case 'search':
@@ -326,9 +366,15 @@ input.on('submit', function(){
     case 'p':
       quickPlay(input.value.slice(1))
       break;
-    // case 'url':
-    //   play(input.value.slice(4))
-    //   break
+    case 'new':
+      createPlist(input.value.slice(3))
+      break;
+    case 'add':
+      addToPlist(input.value.slice(3))
+      break;
+    case 'plist':
+      playPlist(input.value.slice(5))
+      break;
   }
   input.clearValue()
   screen.render()
